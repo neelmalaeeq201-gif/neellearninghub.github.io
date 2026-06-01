@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O/A Level Computer Science: Number Systems Canvas</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --primary-dark: #0f172a;
+            --accent-blue: #2563eb;
+            --mint-green: #10b981;
+            --coral-red: #ef4444;
+            --card-white: #ffffff;
+            --text-dark: #334155;
+            --terminal-dark: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Tracker System */
+        .sidebar {
+            width: 320px;
+            background-color: var(--primary-dark);
+            color: #f1f5f9;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-right: 1px solid #1e293b;
+        }
+
+        .sidebar h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #f8fafc;
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 12px;
+        }
+
+        .tracker-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .progress-label {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .bar-bg {
+            background-color: #334155;
+            border-radius: 20px;
+            height: 10px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            background: linear-gradient(90deg, #3b82f6, var(--mint-green));
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease-in-out;
+        }
+
+        .module-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .module-item {
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            background: transparent;
+        }
+
+        .module-item:hover {
+            color: #f1f5f9;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .module-item.active {
+            background-color: var(--accent-blue);
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Learning Workspace Canvas */
+        .main-workspace {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .top-navbar {
+            background-color: var(--card-white);
+            padding: 18px 30px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content-split {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            display: flex;
+            gap: 24px;
+        }
+
+        .theory-card {
+            flex: 1.2;
+            background: var(--card-white);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid #e2e8f0;
+        }
+
+        .interactive-panel {
+            flex: 0.8;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Typography & Layout elements */
+        .step-badge {
+            background: #eff6ff;
+            color: var(--accent-blue);
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 14px;
+        }
+
+        p {
+            line-height: 1.65;
+            margin-bottom: 14px;
+            color: #475569;
+            font-size: 0.95rem;
+        }
+
+        .use-case-box {
+            background-color: #fefcbf;
+            border-left: 4px solid #d97706;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        /* Virtual Hardware Visualizer Screen */
+        .visualizer-screen {
+            background-color: var(--terminal-dark);
+            color: #e2e8f0;
+            font-family: 'Consolas', 'Courier New', monospace;
+            padding: 18px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);
+            margin: 15px 0;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        /* Quiz UI Elements */
+        .quiz-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .quiz-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            color: var(--primary-dark);
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option-btn {
+            background: var(--card-white);
+            border: 1px solid #cbd5e1;
+            padding: 12px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            color: var(--text-dark);
+        }
+
+        .option-btn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .feedback {
+            margin-top: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: none;
+        }
+
+        /* Navigation Buttons */
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn {
+            padding: 10px 22px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-primary { background: var(--accent-blue); color: white; }
+        .btn-primary:hover { background: #1d4ed8; }
+        .btn-primary:disabled { background: #cbd5e1; cursor: not-allowed; color: #94a3b8;}
+        .btn-secondary { background: #64748b; color: white; }
+        .btn-secondary:hover { background: #475569; }
+
+        /* Q&A Interactive Assistant Chat */
+        .chat-container {
+            background: var(--card-white);
+            border-radius: 12px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: var(--primary-dark);
+            color: white;
+            padding: 14px 18px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .chat-history {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            font-size: 0.88rem;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #fafafa;
+        }
+
+        .bubble { padding: 10px 14px; border-radius: 8px; max-width: 85%; line-height: 1.5; }
+        .bubble.bot { background: #f1f5f9; align-self: flex-start; color: var(--text-dark); border-left: 3px solid var(--accent-blue); }
+        .bubble.user { background: var(--accent-blue); color: white; align-self: flex-end; }
+
+        .chat-inputs {
+            display: flex;
+            border-top: 1px solid #e2e8f0;
+            padding: 12px;
+            background: white;
+        }
+
+        .input-box {
+            flex: 1;
+            border: 1px solid #cbd5e1;
+            padding: 10px 14px;
+            border-radius: 6px;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        .input-box:focus { border-color: var(--accent-blue); }
+
+        .send-btn {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 0 18px;
+            margin-left: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div>
+            <h2>Neel Learning Hub</h2>
+            <div class="tracker-box">
+                <div class="progress-label">
+                    <span>Topic Progress</span>
+                    <strong id="tracker-percentage">16%</strong>
+                </div>
+                <div class="bar-bg">
+                    <div class="bar-fill" id="tracker-fill-bar"></div>
+                </div>
+            </div>
+            
+            <p style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight:700; margin-bottom:10px;">Exam Curriculum</p>
+            <ul class="module-list">
+                <li class="module-item active" onclick="jumpToStep(0)">1. Core Architecture (Base Value)</li>
+                <li class="module-item" onclick="jumpToStep(1)">2. Denary System (Base 10)</li>
+                <li class="module-item" onclick="jumpToStep(2)">3. Binary Logic & Conversions</li>
+                <li class="module-item" onclick="jumpToStep(3)">4. Hexadecimal Architecture</li>
+                <li class="module-item" onclick="jumpToStep(4)">5. Octal Base Logic</li>
+                <li class="module-item" onclick="jumpToStep(5)">6. Quick Exam Shortcuts</li>
+            </ul>
+        </div>
+        <div style="font-size: 0.75rem; color: #64748b; text-align: center; border-top: 1px solid #1e293b; padding-top:10px;">
+            O/A Level CS Exam Guide
+        </div>
+    </div>
+
+    <div class="main-workspace">
+        <div class="top-navbar">
+            <h1 style="font-size: 1.15rem; color: var(--primary-dark); font-weight:600;">Data Representation Sandbox</h1>
+            <div id="status-tag" style="font-size: 0.85rem; color: var(--mint-green); font-weight: 600;">🟢 Interactive Tracking Active</div>
+        </div>
+
+        <div class="content-split">
+            <div class="theory-card" id="theory-card">
+                <div>
+                    <span class="step-badge" id="step-badge">Step 1 of 6</span>
+                    <h3 id="stage-title">Loading Module...</h3>
+                    <div id="stage-body">
+                        </div>
+                </div>
+
+                <div class="footer-nav">
+                    <button class="btn btn-secondary" id="prev-btn" onclick="stepNavigation(-1)">Back</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="stepNavigation(1)">Next Step</button>
+                </div>
+            </div>
+
+            <div class="interactive-panel">
+                <div style="background: white; border-radius: 12px; padding: 18px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                    <span style="font-size: 0.8rem; font-weight: 700; color: var(--primary-dark); display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing:0.5px;">💻 Structural Register Representation View</span>
+                    <div class="visualizer-screen" id="visualizer-screen">
+                        # Layout will alter base settings depending on your active section...
+                    </div>
+                </div>
+
+                <div class="chat-container">
+                    <div class="chat-header">💡 Ask Questions Anytime</div>
+                    <div class="chat-history" id="chat-history-box">
+                        <div class="bubble bot">Hi there! I am monitoring your progress through the exam syllabus. You can ask me to explain any conversions, clarify base logic, or troubleshoot a question right now!</div>
+                    </div>
+                    <div class="chat-inputs">
+                        <input type="text" class="input-box" id="user-chat-prompt" placeholder="Type a concept query (e.g., what is a nibble?)..." onkeypress="handleKeyPress(event)">
+                        <button class="send-btn" onclick="processUserChat()">Ask</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Schema reflecting Curriculum Sections
+        const curriculumData = [
+            {
+                title: "What is a Number System?",
+                badge: "Step 1: Foundational Theory",
+                percentage: 16,
+                body: `
+                    <p>A <strong>Number System</strong> is simply a structured way of representing quantities using a defined set of digits and a constant <strong>Base value</strong> (also known as the radix).</p>
+                    <p>In everyday life, humans process math using the <strong>Denary system</strong> (Base 10). However, computing hardware is comprised of billions of microscopic transistors serving as switches. These switches can only exist in two distinct physical states: <strong>ON</strong> or <strong>OFF</strong>.</p>
+                    <div class="use-case-box">
+                        <strong>💼 Core Concept:</strong> This binary constraint means computers require a base-2 layout system (0 or 1). To make massive chunks of binary clean and human-readable, computer scientists also use <strong>Octal (Base 8)</strong> and <strong>Hexadecimal (Base 16)</strong> structures.
+                    </div>
+                    <div class="quiz-box">
+                        <div class="quiz-title">🧠 Checkpoint: Why do electronic microprocessors rely on Binary instead of Denary?</div>
+                        <div class="quiz-options">
+                            <button class="option-btn" onclick="checkUserAnswer(this, false, 'Not quite. Transistors can easily process 10 digits conceptually, but physically detecting 10 discrete voltage states invites interference errors.')">A) Denary takes up significantly less physical storage space in hardware circuits.</button>
+                            <button class="option-btn" onclick="checkUserAnswer(this, true, 'Perfect! Circuits are constructed out of switches that natively track two clean physical options: High Voltage (1) or Low Voltage (0).')">B) Circuits are comprised of binary electronic switches tracking clean states (ON/OFF).</button>
+                        </div>
+                        <div class="feedback"></div>
+                    </div>
+                `,
+                visualization: "=== COMPUTER CIRCUIT REGISTERS ===\n[Switch Status]:  [ON]  [OFF]  [ON]  [ON]  [OFF]\n[Binary Bit]:      1      0      1      1      0\n================================="
+            },
+            {
+                title: "The Denary Number System (Base 10)",
+                badge: "Step 2: Base-10 Columns",
+                percentage: 33,
+                body: `
+                    <p>Let us look at the structure you already use every day: <strong>Denary</strong>. It uses ten distinct digits: <code>0 through 9</code>.</p>
+                    <p>Every number is parsed based on columns calculated as <strong>Powers of the Base value (10)</strong> going from right to left starting at exponent index 0.</p>
+                    <p>For example, take the value <strong>245</strong>:</p>
+                    <ul>
+                        <li><strong>Column 1 (Far Right):</strong> 10<sup>0</sup> = 1 position. Thus, <code>5 &times; 1 = 5</code></li>
+                        <li><strong>Column 2:</strong> 10<sup>1</sup> = 10 position. Thus, <code>4 &times; 10 = 40</code></li>
+                        <li><strong>Column 3:</strong> 10<sup>2</sup> = 100 position. Thus, <code>2 &times; 100 = 200</code></li>
+                    </ul>
+                    <p>Summing these products yields: <code>200 + 40 + 5 = 245</code>. This identical architectural column layout applies to every number system we study—only the base value shifts!</p>
+                `,
+                visualization: "=== DENARY COLUMN PLACE VALUE MAP ===\nColumns:   |  10²  |  10¹  |  10⁰  |\nWeights:   |  100  |   10  |    1  |\n-----------|-------|-------|-------|\nDigits:    |   2   |   4   |    5  |\nProducts:  |  200  +  40   +    5  | = 245"
+            },
+            {
+                title: "Binary Logic & Conversions (Base 2)",
+                badge: "Step 3: Binary Bit Handling",
+                percentage: 50,
+                body: `
+                    <p>Each value slot in binary is termed a <strong>BIT</strong> (Binary Digit). Column rules shift to tracking <strong>Powers of 2</strong>: <code>1, 2, 4, 8, 16, 32, 64, 128...</code></p>
+                    <p><strong>1. Binary to Denary Conversion:</strong> Map your columns over the binary bits. Add the column weights wherever a <code>1</code> occurs. Let's look at <code>10110101</code>: <br>
+                    <code>128 + 32 + 16 + 4 + 1 = 181</code>.</p>
+                    <p><strong>2. Denary to Binary Conversion (Repeated Division):</strong> Divide your value continuously by 2, and record the remainder weights upwards from bottom to top.</p>
+                    <div class="quiz-box">
+                        <div class="quiz-title">🧠 Checkpoint: Convert the Denary integer value 45 down to binary. What is the correct layout?</div>
+                        <div class="quiz-options">
+                            <button class="option-btn" onclick="checkUserAnswer(this, true, 'Spot on! Repeatedly dividing 45 by 2 or filling matching columns (32 + 8 + 4 + 1) generates 101101.')">A) 101101</button>
+                            <button class="option-btn" onclick="checkUserAnswer(this, false, 'Incorrect. Remember to track your place weights: 32, 16, 8, 4, 2, 1 and compile remainders upwards.')">B) 110011</button>
+                        </div>
+                        <div class="feedback"></div>
+                    </div>
+                `,
+                visualization: "=== 8-BIT BINARY REGISTER CONVERSION ===\nWeights: | 128 | 64 | 32 | 16 |  8 |  4 |  2 |  1 |\n---------|-----|----|----|----|----|----|----|----|\nBits:    |  1  |  0 |  1 |  1 |  0 |  1 |  0 |  1 |\n\nMath: 128 + 0 + 32 + 16 + 0 + 4 + 0 + 1 = 181 Denary"
+            },
+            {
+                title: "Hexadecimal Architecture (Base 16)",
+                badge: "Step 4: Compact Hex Mappings",
+                percentage: 66,
+                body: `
+                    <p><strong>Hexadecimal (Hex)</strong> uses Base 16. Because single columns cannot hold multi-character strings like "10" or "14", Hex maps values 10 through 15 to alpha letters:</p>
+                    <p style="text-align:center;"><code>A=10, B=11, C=12, D=13, E=14, F=15</code></p>
+                    <p><strong>The Pro Shortcut (Binary to Hex):</strong> Instead of converting values to Denary first, group your binary digits into **sets of 4 bits** from right to left (each group of 4 bits is called a **nibble**). Convert each group independently!</p>
+                    <div class="use-case-box">
+                        <strong>💼 Real World Use-Case:</strong> Large binary paths like <code>10111101</code> look incredibly bulky. By splitting it into groups of four (<code>1011</code> and <code>1101</code>), we can represent the identical register cleanly as <code>BD</code> inside web color systems or error codes.
+                    </div>
+                `,
+                visualization: "=== THE PRO NIBBLE SPLIT METHOD ===\nTarget Binary:  1  0  1  1  1  1  0  1\n                \\_________/  \\_________/\nSplits (4-bit):    1011         1101\nDenary Weight:      11           13\nHex Output:          B            D     => Hex Code: BD"
+            },
+            {
+                title: "Octal Base Logic (Base 8)",
+                badge: "Step 5: Base-8 Mechanics",
+                percentage: 83,
+                body: `
+                    <p><strong>Octal</strong> utilizes Base 8, applying only the digits <code>0 through 7</code>. The columns represent powers of 8: <code>1, 8, 64, 512...</code></p>
+                    <p>Much like Hexadecimal, Octal maps easily to Binary strings using a structural grouping trick. For Octal, we isolate bits into **sets of 3** starting from the right-hand column.</p>
+                    <p>Let's convert <code>110101</code> to Octal: Split it into sets of three: <code>110</code> and <code>101</code>. <br>
+                    <code>110</code> evaluates to 6, and <code>101</code> evaluates to 5. The total configuration results in <strong>65 octal</strong>.</p>
+                `,
+                visualization: "=== OCTAL REGISTER SEGMENTATION ===\nTarget Binary:  1  1  0  1  0  1\n                \\_____/  \\_____/\nSplits (3-bit):   110      101\nEvaluation:        6        5      => Octal Value: 65"
+            },
+            {
+                title: "Quick Exam Shortcuts",
+                badge: "Step 6: Revision Strategies",
+                percentage: 100,
+                body: `
+                    <p>Before you wrap up your syllabus modules, study these three core exam tips to preserve points:</p>
+                    <ul>
+                        <li><strong>Tip 1: Always Show Your Working Layouts:</strong> O/A level mark schemes frequently distribute partial credits for your conversion architecture even if you make a calculation error at the final stage.</li>
+                        <li><strong>Tip 2: Use the Nibble Grouping Trick:</strong> Never convert Binary &rarr; Denary &rarr; Hex. Group bits into fours instead. It is significantly faster and prevents arithmetic errors.</li>
+                        <li><strong>Tip 3: Write out Place Grids First:</strong> When converting Denary to Binary under exam time-pressure, sketch your weight registers <code>(128, 64, 32, 16, 8, 4, 2, 1)</code> explicitly onto the page before filling anything. This removes visual guessing.</li>
+                    </ul>
+                `,
+                visualization: "=== EXAM CHECKLIST ===\n[ ] Showed all manual division tracks?\n[ ] Grouped bits in 4s for Hex numbers?\n[ ] Sketch column grids before filling bits?"
+            }
+        ];
+
+        let activeStepIndex = 0;
+
+        function appInitialization() {
+            loadLectureStep(activeStepIndex);
+        }
+
+        // Render dynamic step profiles
+        function loadLectureStep(index) {
+            activeStepIndex = index;
+            const currentData = curriculumData[index];
+            
+            // Text adjustments
+            document.getElementById('step-badge').innerText = currentData.badge;
+            document.getElementById('stage-title').innerText = currentData.title;
+            document.getElementById('stage-body').innerHTML = currentData.body;
+            
+            // Layout console visualizer string
+            document.getElementById('visualizer-screen').innerText = currentData.visualization;
+            
+            // Progress elements recalculation
+            document.getElementById('tracker-fill-bar').style.width = currentData.percentage + '%';
+            document.getElementById('tracker-percentage').innerText = currentData.percentage + '%';
+
+            // Sidebar navigation sync
+            const lists = document.querySelectorAll('.module-item');
+            lists.forEach((node, nodeIdx) => {
+                if(nodeIdx === index) node.classList.add('active');
+                else node.classList.remove('active');
+            });
+
+            // Footer control state locks
+            document.getElementById('prev-btn').disabled = (index === 0);
+            if (index === curriculumData.length - 1) {
+                document.getElementById('next-btn').innerText = "Finish Topic 🎓";
+                document.getElementById('next-btn').style.background = "var(--mint-green)";
+            } else {
+                document.getElementById('next-btn').innerText = "Next Step";
+                document.getElementById('next-btn').style.background = "var(--accent-blue)";
+            }
+        }
+
+        function jumpToStep(targetIdx) {
+            loadLectureStep(targetIdx);
+        }
+
+        function stepNavigation(directionOffset) {
+            let nextIndex = activeStepIndex + directionOffset;
+            if (nextIndex >= 0 && nextIndex < curriculumData.length) {
+                loadLectureStep(nextIndex);
+            } else if (nextIndex === curriculumData.length) {
+                alert("Fantastic work! You have navigated through all core O/A Level Number System logic components successfully.");
+            }
+        }
+
+        // Interactive validation loop
+        function checkUserAnswer(buttonContext, isCorrect, feedbackMsg) {
+            const currentQuizBlock = buttonContext.closest('.quiz-box');
+            const targetFeedbackSlot = currentQuizBlock.querySelector('.feedback');
+            targetFeedbackSlot.style.display = "block";
+            targetFeedbackSlot.innerText = feedbackMsg;
+
+            // Reset alternative option sibling buttons
+            const elementSiblings = currentQuizBlock.querySelectorAll('.option-btn');
+            elementSiblings.forEach(btn => {
+                btn.style.border = "1px solid #cbd5e1";
+                btn.style.background = "var(--card-white)";
+            });
+
+            if (isCorrect) {
+                targetFeedbackSlot.style.color = "var(--mint-green)";
+                buttonContext.style.border = "2px solid var(--mint-green)";
+                buttonContext.style.background = "#ecfdf5";
+            } else {
+                targetFeedbackSlot.style.color = "var(--coral-red)";
+                buttonContext.style.border = "2px solid var(--coral-red)";
+                buttonContext.style.background = "#fef2f2";
+            }
+        }
+
+        // Q&A Terminal Interactive Engine
+        function processUserChat() {
+            const promptInputField = document.getElementById('user-chat-prompt');
+            const currentText = promptInputField.value.trim();
+            if(!currentText) return;
+
+            const chatHistoryBox = document.getElementById('chat-history-box');
+
+            // Inject User Bubble Node
+            const userBubble = document.createElement('div');
+            userBubble.className = 'bubble user';
+            userBubble.innerText = currentText;
+            chatHistoryBox.appendChild(userBubble);
+            
+            promptInputField.value = '';
+            chatHistoryBox.scrollTop = chatHistoryBox.scrollHeight;
+
+            // Compute automated Context-Aware response
+            setTimeout(() => {
+                const companionBubble = document.createElement('div');
+                companionBubble.className = 'bubble bot';
+                companionBubble.innerHTML = evaluateSyllabusBotLogic(currentText);
+                chatHistoryBox.appendChild(companionBubble);
+                chatHistoryBox.scrollTop = chatHistoryBox.scrollHeight;
+            }, 500);
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') {
+                processUserChat();
+            }
+        }
+
+        function evaluateSyllabusBotLogic(inputStr) {
+            const refined = inputStr.toLowerCase();
+            if(refined.includes('hex') || refined.includes('hexadecimal')) {
+                return "Hexadecimal is a <b>Base 16</b> layout system utilizing numbers <code>0-9</code> and letters <code>A-F</code> (where A=10, B=11... F=15). Examiners love it because one hex character cleanly summarizes exactly 4 binary bits (a nibble).";
+            } else if (refined.includes('binary') || refined.includes('bit')) {
+                return "Binary tracks quantities using <b>Base 2</b>. Each column value increases by powers of 2 (1, 2, 4, 8, 16...). Each individual place digit is termed a <b>bit</b>.";
+            } else if (refined.includes('nibble')) {
+                return "A <b>nibble</b> is a computer science term for a group of exactly <b>4 bits</b> (half of a standard byte). When converting binary strings to Hexadecimal, you segment your byte down into individual nibbles!";
+            } else if (refined.includes('octal')) {
+                return "Octal is a <b>Base 8</b> system that maps values using columns based on powers of 8 (1, 8, 64...). To convert binary to octal quickly, slice your binary bit array into <b>groups of 3</b> starting from the right-hand column.";
+            } else if (refined.includes('trick') || refined.includes('shortcut')) {
+                return "The ultimate conversion shortcut for your exam: For <b>Hexadecimal</b>, group your binary digits into clusters of 4 bits. For <b>Octal</b>, group your binary digits into clusters of 3 bits. This saves you from converting to denary first!";
+            }
+            return "That relates closely to our curriculum targets. Keep in mind that place values are simply calculated by mounting powers of the target base from right to left, starting with power exponent 0!";
+        }
+
+        window.onload = appInitialization;
+    </script>
+</body>
+</html>
